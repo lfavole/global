@@ -1,0 +1,40 @@
+// Source: https://github.com/whosajid/UI-Colors/blob/90e06f7/script.js
+// Apparently Lightning CSS doesn't support the max() function with unit-less numbers
+// See: https://github.com/parcel-bundler/lightningcss/issues/1044
+@mixin color-palette($chroma, $hue) {
+    :root {
+        --bg-dark:      oklch(0.92 #{$chroma * 0.5}     #{$hue});
+        --bg:           oklch(0.96 #{$chroma * 0.5}     #{$hue});
+        --bg-light:     oklch(1    #{$chroma * 0.5}     #{$hue});
+        --text:         oklch(0.15 #{$chroma}           #{$hue});
+        --text-muted:   oklch(0.4  #{$chroma}           #{$hue});
+        --highlight:    oklch(1    #{$chroma}           #{$hue});
+        --border:       oklch(0.6  #{$chroma}           #{$hue});
+        --border-muted: oklch(0.7  #{$chroma}           #{$hue});
+        --primary:      oklch(0.4  #{max($chroma, 0.1)} #{$hue});
+        --secondary:    oklch(0.4  #{max($chroma, 0.1)} #{($hue + 180) % 360});
+        --danger:       oklch(0.5  #{max($chroma, 0.05)} 30);
+        --warning:      oklch(0.5  #{max($chroma, 0.05)} 100);
+        --success:      oklch(0.5  #{max($chroma, 0.05)} 160);
+        --info:         oklch(0.5  #{max($chroma, 0.05)} 260);
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-dark:      oklch(0.1  #{$chroma * 0.5}      #{$hue});
+            --bg:           oklch(0.15 #{$chroma * 0.5}      #{$hue});
+            --bg-light:     oklch(0.2  #{$chroma * 0.5}      #{$hue});
+            --text:         oklch(0.96 #{min($chroma, 0.1)}  #{$hue});
+            --text-muted:   oklch(0.76 #{min($chroma, 0.1)}  #{$hue});
+            --highlight:    oklch(0.5  #{$chroma}            #{$hue});
+            --border:       oklch(0.4  #{$chroma}            #{$hue});
+            --border-muted: oklch(0.3  #{$chroma}            #{$hue});
+            --primary:      oklch(0.76 #{max($chroma, 0.1)}  #{$hue});
+            --secondary:    oklch(0.76 #{max($chroma, 0.1)}  #{($hue + 180) % 360});
+            --danger:       oklch(0.7  #{max($chroma, 0.05)} 30);
+            --warning:      oklch(0.7  #{max($chroma, 0.05)} 100);
+            --success:      oklch(0.7  #{max($chroma, 0.05)} 160);
+            --info:         oklch(0.7  #{max($chroma, 0.05)} 260);
+        }
+    }
+}

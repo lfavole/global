@@ -1,0 +1,76 @@
+name: Compile SCSS and deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  compile:
+    name: Compile SCSS
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Dart Sass
+        run: |
+          SASS_VERSION=$(curl -s https://api.github.com/repos/sass/dart-sass/releases/latest | jq -r .tag_name)
+          curl -L -o dart-sass.tar.gz "https://github.com/sass/dart-sass/releases/download/${SASS_VERSION}/dart-sass-${SASS_VERSION}-linux-x64.tar.gz"
+          tar -xzf dart-sass.tar.gz
+          chmod +x dart-sass/sass
+
+      - name: Install lightningcss-cli
+        run: |
+          npm install -g lightningcss-cli
+
+      - name: Compile SCSS
+        run: |
+          shopt -s globstar
+          for file in **/*.scss; do
+            if [[ ! $file =~ ^_ ]]; then
+              (
+              ./dart-sass/sass --no-source-map --style compressed "$file" "_${file%.scss}.css" &&
+                (lightningcss --minify --bundle --targets ">= 0.25%" "_${file%.scss}.css" -o "${file%.scss}.css" ||
+                mv "_${file%.scss}.css" "${file%.scss}.css"
+                )
+              ) &
+            fi
+          done
+          wait
+
+      - name: Move files to a temporary directory
+        run: |
+          shopt -s globstar
+          mkdir -p _site
+          rm -f **/*.scss
+          for item in *; do
+            if [[ "$item" != ".git" && "$item" != ".github" && "$item" != "dart-sass" && "$item" != "_site" && "$item" != *.md ]]; then
+              mv "$item" _site/
+            fi
+          done
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site/
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: compile
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

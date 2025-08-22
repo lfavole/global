@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="demo.css">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js" defer></script>
+</head>
+<body>
+<h1>Demo</h1>
+<form>
+    <fieldset>
+        <legend>This is a fieldset</legend>
+        <p>Content</p>
+    </fieldset>
+    <fieldset>
+        <legend><span class="number">2</span> Test</legend>
+        <p>Content</p>
+    </fieldset>
+    <p>
+        <label for="normal-checkbox">Normal checkbox (tick):</label>
+        <input type="checkbox" id="normal-checkbox" name="normal-checkbox">
+    </p>
+    <p>
+        Normal radio:
+        <input type="radio" name="normal-radio" id="normal-radio-a"> <label for="normal-radio-a">A</label>
+        <input type="radio" name="normal-radio" id="normal-radio-b"> <label for="normal-radio-b">B</label>
+    </p>
+    <p>
+        <label for="cross-checkbox">Cross checkbox:</label>
+        <input type="checkbox" class="input--cross" id="cross-checkbox" name="cross-checkbox">
+    </p>
+    <p>
+        Cross radio:
+        <input type="radio" class="input--cross" name="cross-radio" id="cross-radio-a"> <label for="cross-radio-a">A</label>
+        <input type="radio" class="input--cross" name="cross-radio" id="cross-radio-b"> <label for="cross-radio-b">B</label>
+    </p>
+    <p>
+        Tick radio:
+        <input type="radio" class="input--tick" name="tick-radio" id="tick-radio-a"> <label for="tick-radio-a">A</label>
+        <input type="radio" class="input--tick" name="tick-radio" id="tick-radio-b"> <label for="tick-radio-b">B</label>
+    </p>
+    <p>
+        Yes-no radio:
+        <input type="radio" class="input--tick input--yes" name="yesno-radio" id="yesno-radio-yes"> <label for="yesno-radio-yes">Yes</label>
+        <input type="radio" class="input--cross input--no" name="yesno-radio" id="yesno-radio-no"> <label for="yesno-radio-no">No</label>
+    </p>
+    <p>
+        <label for="yesno-checkbox">Yes-no checkbox:</label>
+        <input type="checkbox" class="input--yesno" id="yesno-checkbox" name="yesno-checkbox">
+        <label for="yesno-checkbox">Yes or no?</label>
+    </p>
+    <p>
+        <label for="toggle-checkbox">Toggle checkbox:</label>
+        <input type="checkbox" class="input--toggle" id="toggle-checkbox" name="toggle-checkbox">
+    </p>
+    <p>
+        <label for="toggle-yesno-checkbox">Toggle yes-no checkbox:</label>
+        <input type="checkbox" class="input--toggle input--yesno" id="toggle-yesno-checkbox" name="toggle-yesno-checkbox">
+    </p>
+    <p>
+        <label for="ind-checkbox">Indeterminate checkbox:</label>
+        <input type="checkbox" id="ind-checkbox" name="ind-checkbox">
+        <!-- alpine.js component with yes,no,indeterminate that changes the state of the box -->
+        <select
+        class="input--indeterminate"
+        x-data="{ state: 'no' }"
+        x-model="state"
+        @change="
+            $el.previousElementSibling.indeterminate = state == 'ind';
+            $el.previousElementSibling.checked = state == 'yes';
+        "
+        >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="ind">Indeterminate</option>
+        </select>
+    </p>
+    <p>
+        <label for="ind-toggle">Indeterminate yes-no toggle:</label>
+        <input type="checkbox" class="input--toggle input--yesno" id="ind-toggle" name="ind-toggle">
+        <!-- alpine.js component with yes,no,indeterminate that changes the state of the box -->
+        <select
+        class="input--indeterminate"
+        x-data="{ state: 'no' }"
+        x-model="state"
+        @change="
+            $el.previousElementSibling.indeterminate = state == 'ind';
+            $el.previousElementSibling.checked = state == 'yes';
+        "
+        >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="ind">Indeterminate</option>
+        </select>
+    </p>
+    <p>
+        <label for="disabled-input">Disabled input:</label>
+        <input type="text" id="disabled-input" name="disabled-input" disabled value="This input is disabled">
+    </p>
+</form>
+</body>
+</html>
